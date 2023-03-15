@@ -1,0 +1,86 @@
+import psycopg2
+
+class Comp:
+    def __init__(self,table) :
+     
+            self.connection = psycopg2.connect(user='postgres', password='1234', host='localhost', port=5432, database='northwind')
+            self.table = table
+            self.primary_key = ''
+    
+
+    def create_table(self, values={'name': 'varchar(50)', 'address': 'varchar(50)', 'phone': 'int'}, pk=''):
+        try:
+             
+            self.primary_key = pk
+            values[self.primary_key] = values[self.primary_key] + ' PRIMARY KEY'
+            cursor=self.connection.cursor()
+            res = []
+            for i, j in values.items():
+                res.append(str(i)+' '+str(j))
+            query = f"""create table {self.table} ({', '.join(res)})"""
+            print(query)
+            cursor.execute(query)
+            self.connection.commit()
+            print("table created successfully")
+        except Exception as e:
+            print("Error creating table:", e)  
+
+    def insert_table(self, query_details):
+        cursor = self.connection.cursor()
+        columns = ', '.join(query_details.keys())
+        query_values = ', '.join([str(f"'{val}'") for val in query_details.values()])
+        query = f"""insert into {self.table}({columns}) values({query_values})"""
+        print(query)
+        cursor.execute(query)
+        self.connection.commit()
+        print("Table inserted successfully")
+
+
+    
+
+    def update_table(self, values):
+            try:
+         
+                cursor = self.connection.cursor()
+                res = []
+                for i, j in values.items():
+                  res.append(str(i) + " = '" + str(j) + "'")
+                set = ", ".join(res)
+                query = f"update {self.table} set {set}"
+            
+                cursor.execute(query)
+                self.connection.commit()
+                print( "Table updated successfully")
+            except Exception as e:
+                print(f"Error while updating table: {e}")
+                self.connection.rollback()
+
+    def delete_table(self, values):
+            try:
+        
+                cursor = self.connection.cursor()
+                res= []
+                for i, j in values.items():
+                  res.append(str(i) + " = '" + str(j) + "'")
+                where = " and ".join(res)
+                query = f"delete from {self.table} where {where}"
+            
+                cursor.execute(query)
+                self.connection.commit()
+                print("table deleted successfully")
+            except Exception as e:
+                print(f"Error while deleting table")
+         
+              
+    
+
+
+
+Comp=Comp('table51')
+
+Comp.create_table(pk='phone')
+query_details = {'name':'akhil','address':'hyd','phone': 995}
+Comp.insert_table(query_details)
+
+Comp.update_table({'name':'abhi'})
+# Comp.delete_table({'address': 'hyd'})
