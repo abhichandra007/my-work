@@ -1,0 +1,36 @@
+from flask import Flask,redirect,url_for 
+flask01 =Flask(__name__)
+
+@flask01.route('/')
+def home():
+    return"hey its me"
+
+
+@flask01.route('/success/<int:score>')
+def success(score):
+    return "the person has passed and the marks are+"+ str(score)
+
+@flask01.route('/fail/<int:score>')
+def fail(score):
+    return "the person has failed and the marks are" +str(score)
+
+# # result cheker
+# @flask01.route('/results/<int:marks>')
+# def results(marks):
+#      result=""
+#      if marks<50:
+#          result='fail'
+
+#      else:
+#          result='success'
+#      return redirect(url_for(result,score=marks))        
+
+
+
+
+
+if __name__ == '__main__':
+    flask01.run(debug=True)
+    
+    
+    ////after getting in webpage in link after the link write  / and some name or /success or fail/ any digit
