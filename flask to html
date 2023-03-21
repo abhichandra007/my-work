@@ -23,7 +23,6 @@ if __name__ == "__main__":
     </head>
     <body>
         <h5>new web page</h5>
-        <p>that is what he said </p>
         {%for x in range(20)%}
          <p>{{x}}</p>
         {% endfor %}
