@@ -1,0 +1,33 @@
+from flask import Flask,redirect,url_for,render_template
+app = Flask(__name__)
+
+@app.route("/<name>")
+def home(name):
+    return render_template("index1.html")
+
+
+if __name__ == "__main__":
+    app.run()
+
+
+
+
+
+
+//////in html save this file as .html at last
+
+<!doctype html>
+<html>
+<head>
+    <title>abhi</title>
+    </head>
+    <body>
+        <h5>new web page</h5>
+        <p>that is what he said </p>
+        {%for x in range(20)%}
+         <p>{{x}}</p>
+        {% endfor %}
+    
+    
+    </body>>
+</html>
