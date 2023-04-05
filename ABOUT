@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>About Us</title>
+</head>
+<body>
+    <div class="about-section">
+        <h1>About Us </h1>
+       
+        <i><p>We are all friends .</p>
+      </div>
+      
+      <h2 style="text-align:center">Our Team</h2>
+      <div class="row">
+        <div class="column">
+          <div class="card">
+            <img src="" alt="Abhi" style="width:100%">
+            <div class="container">
+              <h2>Abhi Chandra</h2>
+              <p class="title">Founder</p>
+              <p> Has an experience on 5 years in this field.</p>
+              <p>abhi@example.com</p>
+              <p><button class="button">Contact</button></p>
+            </div>
+          </div>
+        </div>
+          
+           <div class="column">
+          <div class="card">
+            <img src="" alt="Akhil" style="width:100%">
+            <div class="container">
+              <h2>Akhil</h2>
+              <p class="title">Co-Founder </p>
+              <p></p>
+              <p>akhil@example.com</p>
+              <p><button class="button">Contact</button></p>
+            </div>
+          </div>
+        </div>
+      </div>
+</body>
+</html>
+      
+        <div class="column">
+          <div class="card">
+            <img src="" alt="Rohit" style="width:100%">
+            <div class="container">
+              <h2>Rohit</h2>
+              <p class="title">Marketing Head</p>
+              <p> Has an experience of 10 years in advertising.  he is one of the key member to our company, one of a founder.</p>
+              <p>rohit@example.com</p>
+              <p><button class="button">Contact</button></p>
+            </div>
+          </div>
+        </div>
+      
+        <div class="column">
+          <div class="card">
+            <img src="" alt="Revanth" style="width:100%">
+            <div class="container">
+              <h2>Revanth</h2>
+              <p class="title">Manager</p>
+              <p>  Maintains the whole club  .</p>
+              <p>revanth@example.com</p>
+              <p><button class="button">Contact</button></p>
+            </div>
+          </div>
+        </div>
+      </div>
+</body>
+</html>
