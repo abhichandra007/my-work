@@ -1,0 +1,888 @@
+// demo.py
+from flask import Flask,render_template,request
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:1234@localhost:5432/northwind' 
+# app.config['SQLALCHEMY_DATABASE_URL'] = 'postgres://username:password@localhost:5432/dbname'
+db = SQLAlchemy(app)
+
+
+class Contacts(db.Model):
+    '''
+    sno, name phone_num, Subject, date, email
+    ''' 
+    sno = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    phone_num = db.Column(db.String(12), nullable=False)
+    Subject = db.Column(db.String(120), nullable=False)
+    date = db.Column(db.String(2000), nullable=True)
+    email = db.Column(db.String(20), nullable=False)
+
+@app.route("/")  
+def home():
+    return render_template("index.html")
+
+ 
+@app.route("/about")
+def about():
+    return render_template("about.html")  
+
+
+@app.route("/contact", methods = ['GET', 'POST'])
+def contact():
+    if(request.method=='POST'):
+        '''Add entry to the database'''
+        name = request.form.get('name')
+        email = request.form.get('email')
+        phone = request.form.get('phone')
+        Subject = request.form.get('Subject')
+        entry = Contacts(name=name, phone_num = phone, Subject = Subject, email = email )
+        db.session.add(entry)
+        db.session.commit()
+    return render_template("contact.html")
+    
+@app.route("/login_form", methods = ['GET', 'POST'])
+def logging():
+    if(request.method=='POST'):
+        '''Add entry to the database'''
+        username = request.form.get('username')
+        Password =request.form.get('Password')
+        entry = logging (username=username, Password=Password)
+        db.session.add(entry)
+        db.session.commit()
+    return render_template("login_form.html")    
+
+
+@app.route("/sign_up", methods = ['GET', 'POST'])
+def signingup():
+    if(request.method=='POST'):
+        '''Add entry to the database'''
+        email = request.form.get('email')
+        password = request.form.get('password')
+        repeatPassword = request.form.get('repeatpassword')
+        entry = signingup(email=email , password=password, repeatPassword=repeatPassword)
+        db.session.add(entry)
+        db.session.commit()
+    return render_template("sign_up.html")
+@app.route("/book", methods = ['GET','POST'])
+def book():
+    if(request.method=='POST'):
+        '''Add entry to the database'''
+        name = request.form.get('name')
+        Email =request.form.get('Email')
+        phone= request.form.get('phone')
+        date_and_time= request.form.get('date and time')
+        entry = Contacts(name=name,Email=Email, phone= phone,date_and_time= date_and_time)
+        db.session.add(entry)
+        db.session.commit()
+    return render_template("book.html")
+        
+
+
+
+    
+if __name__ == '__main__':
+    with app.app_context():
+
+        db.create_all()
+        app.run(debug = True,port=8080)
+  
+  /// index.html
+  <!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>Abhi Tourism</title>
+	<style>
+		*  {
+			margin: 0;
+			padding: 0;
+		}
+
+		.navbar {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: sticky;
+			top: 0;
+			cursor: pointer;
+		}
+
+		.background {
+			background: black;
+			background-blend-mode: darken;
+			background-size: cover;
+		}
+
+		.nav-list {
+			width: 70%;
+			display: flex;
+			align-items: center;
+		}
+
+		.logo {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.logo img {
+			width: 150px;
+			height: 80px;
+			border-radius: 80px;
+			
+		}
+
+		.nav-list li {
+			list-style: none;
+			padding: 26px 30px;
+		}
+
+		.nav-list li a {
+			text-decoration: none;
+			color: white;
+		}
+
+		.nav-list li a:hover {
+			color: pink;
+		}
+
+		.lg_btn{
+			margin-left: 2rem;
+			padding: 10px 1rem;
+			border-radius: 20px;
+			color: white;
+			background: rgb(216, 219, 15);
+			cursor: auto;
+		}
+		.bg_btn{
+			margin-left: 2rem;
+			padding: 10px 1rem;
+			border-radius: 20px;
+			color: white;
+			background: rgb(126, 240, 111);
+			cursor: auto;
+
+		}
+		   
+
+		.rightnav {
+			width: 30%;
+			text-align: right;
+		}
+
+		#search {
+			padding: 5px;
+			font-size: 17px;
+			border: 2px solid grey;
+			border-radius: 9px;
+		}
+
+		.firstsection {
+	
+			height: 500px;
+
+			
+		}
+
+		.secondsection {
+			background-color: rgba(243, 234, 109, 0.2);
+			height: 400px;
+		}
+
+		.box-main {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			color: black;
+			max-width: 80%;
+			margin: auto;
+			height: 80%;
+			background-image: url("static/ground1.jpeg");
+		}
+
+		.firsthalf {
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+		
+
+
+
+		.text-big {
+			font-family: 'Piazzolla', serif;
+			font-weight: bold;
+			font-size: 35px;
+		}
+
+		.text-small {
+			font-size: 18px;
+		}
+
+		.btn {
+			padding: 8px 20px;
+			margin: 7px 0;
+			border: 2px solid white;
+			border-radius: 8px;
+			background: none;
+			color: white;
+			cursor: pointer;
+		}
+
+		.btn-sm {
+			padding: 6px 10px;
+			vertical-align: middle;
+		}
+
+		.section {
+			height: 400px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			max-width: 90%;
+			margin: auto;
+		}
+
+		.section-Left {
+			flex-direction: row-reverse;
+		}
+
+		.paras {
+			padding: 0px 65px;
+		}
+
+
+
+		.center {
+			text-align: center;
+		}
+		.cri {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin-right:20px;
+			}
+
+		#img {
+			max-width: 50%;
+			max-height:10%;
+			}
+		#imgb {
+			padding:20px;
+		}
+
+		.tc {
+			font-size: 20px;
+			padding-left: 20px;
+			}
+		.bk {
+			margin-left: 2rem;
+			padding: 10px 1rem;
+			border-radius: 20px;
+			color: white;
+			background: rgb(43, 177, 218);
+			cursor: auto;
+		}
+		
+		.voli {
+			display: flex;
+			align-items: center;
+			justify-content: center
+		}
+		.vb {
+			font-size: 20px;
+			padding-left: 20px;
+		}
+		.bad {
+			display: flex;
+			align-items: center;
+			justify-content: center
+		}
+		.bd {
+			font-size: 20px;
+			padding-left: 20px;
+		
+		}
+		.blog {
+			margin: 0 auto;
+			max-width: 800px;
+		}
+
+		.blog-header {
+			text-align: center;
+			padding: 20px;
+		}
+
+		.blog-title {
+			font-size: 36px;
+			font-weight: bold;
+		}
+
+		.blog-subtitle {
+			font-size: 24px;
+			color: gray;
+		}
+
+		.blog-post {
+			margin-bottom: 20px;
+			padding: 20px;
+			border: 1px solid lightgray;
+		}
+
+		.blog-post-title {
+			font-size: 28px;
+			margin-bottom: 10px;
+		}
+
+		.blog-post-date {
+			font-size: 18px;
+			color: gray;
+			margin-bottom: 20px;
+		}
+
+		.blog-post-content {
+			font-size: 18px;
+			line-height: 1.5;
+		}
+		
+		#bat{
+			width:600px;
+			height:300px;
+		}
+
+		.text-footer {
+			text-align: center;
+			padding: 30px 0;
+			font-family: 'Ubuntu', sans-serif;
+			display: flex;
+			justify-content: center;
+			color: white;
+		}
+		.vrg{
+			width:600px;
+			height:250px;
+			margin:0px;
+		}
+		.cimg{
+			width:600px;
+			height:250px;
+			margin:0px;
+		}
+	</style>
+</head>
+
+<body>
+	<nav class="navbar background">
+		<ul class="nav-list">
+			<div class="logo">
+				<img src= "static/logo.jpg">
+			</div>
+			<!-- <li><a href="#web">Home</a></li> -->
+			<li><a href="/contact">Contact Us</a></li>
+			<li><a href="/about">About Us</a></li>
+			<l1><button class="lg_btn"><a href="/login_form">login</a></button></l1>
+			<li><button class="bg_btn"><a href="/sign_up">sign up </a></button></li>
+
+
+		</ul>
+
+		<div class="rightNav">
+			<input type="text" name="search" id="search">
+			<button class="btn btn-sm">Search</button>
+		</div>
+	</nav>
+
+	<section class="firstsection">
+		<div class="box-main">
+			<div class="firstHalf">
+				<!-- <p style="background-image: url('static/ground.jpeg');"></p> -->
+				<!-- background-image: url("static/ground.jpeg"); -->
+				<h1 class="text-big" id="web">Explore..</h1>
+				<p class="text-small">
+	We provide our best service to our users we always find a way to better our product and make your experience more better everytime.
+				</p>
+
+
+			</div>
+		</div>
+	</section>
+	<body>
+		<div class="blog">
+			<header class="blog-header pure-g">
+				<div class="pure-u-1">
+					<h1 class="blog-title">
+						Welcome to FDFS
+					</h1>
+					<p class="blog-subtitle">
+						Play games in a personal space where you feel free 
+					 
+					</p>
+				</div>
+			</header>
+			<div class="blog-posts pure-g">
+				<div class="pure-u-1 pure-u-md-1-2">
+					<article class="blog-post">
+						<h2 class="blog-post-title">What are we</h2>
+						<!-- <p class="blog-post-date">January 1, 2021</p> -->
+						<p class="blog-post-content">
+							We Provide indoor and outdoor games for less cost
+							we arrange every requirement for matches. Last year 
+							district level tournoment was held in our place.
+						</p>
+					</article>
+				</div>
+				<div class="pure-u-1 pure-u-md-1-2">
+					<article class="blog-post">
+						<h2 class="blog-post-title">Future Goals</h2>
+						<!-- <p class="blog-post-date">January 2, 2021</p> -->
+						<p class="blog-post-content">
+						We have regular discounts for our login people
+						we are planning to establish our cmpany throughout
+						HYD and arrange an easy way to users to Book
+						places to play.
+						</p>
+					</article>
+				</div>
+			</div>
+		</div>
+
+	<p><h1>Cricket</h1></p>
+	<div class="cri">
+		<div class="image">
+		  <img class="cimg"src="static/cric.jpg">
+		</div>
+		<div class="tc">
+		  <p>We provide ground and other things to play,we arrange tournament matches also based on customer request. we charge per hour</p>
+		  <l1><button class="bk"><a href="book">Book Now</a></button></l1>
+
+		</div>
+	  </div>
+	  <p><h1> Volley Ball</h1></p>
+	<div class="voli">
+		<div class="imagev">
+		  <img class='vrg'src="static/volley.jpg">
+		</div>
+		<div class="vb">
+			<p>We provide outdoor volley ball place with sand in it, the place is cleaned every day,we arrange tournament matches also based on customer request. we charge per hour</p>
+
+			<l1><button class="bk"><a href="book">Book Now</a></button></l1>
+		</div>
+	  </div>
+	  <p><h1>Badminton</h1></p>
+	  <div class="bad">
+		<div class="imageb">
+		  <img id =bat src="static/badminton.jpg">
+		</div>
+		<div class="tc">
+			<p>We provide indoor   minton.We provide everything for the game. we provid shoes also if needed.</p>
+
+			<l1><button class="bk"><a href="book">Book Now</a></button></l1>
+		</div>
+	  </div>
+
+
+
+	<footer class="background">
+		<p class="text-footer">
+			Copyright ©-All rights are reserved
+		</p>
+
+
+	</footer>
+</body>
+
+</html>
+
+//about.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>About Us</title>
+      <style>
+        body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+  }
+  /* this is for about.html page  */
+  
+  html {
+    box-sizing: border-box;
+  }
+  
+  *, *:before, *:after {
+    box-sizing: inherit;
+  }
+  
+  .column {
+    float: left;
+    width: 33.3%;
+    margin-bottom: 16px;
+    padding: 0 8px; 
+  }
+  
+  .card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    margin: 8px;
+  }
+  
+  .about-section {
+    padding: 50px;
+    text-align: center;
+    background-color: hwb(197 29% 38%);;
+    color: white;
+  }
+  
+  .container {
+    padding: 0 16px;
+  }
+  
+  .container::after, .row::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+  
+  .title {
+    color: grey;
+  }
+  
+  .button {
+    border: none;
+    outline: 0;
+    display: inline-block;
+    padding: 8px;
+    color: white;
+    background-color: #000;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  .button:hover {
+    background-color: #555;
+  }
+  
+  @media screen and (max-width: 650px) {
+    .column {
+      width: 100%;
+      display: block;
+    }
+  }
+      </style>
+</head>
+<body>
+    <div class="about-section">
+        <h1>About Us </h1>
+        <p>This is the information about us .</p>
+        <p>We provide our best service to improve your experience in travelling.</p>
+      </div>
+      
+      <h2 style="text-align:center">Our Team</h2>
+      <div class="row">
+        <div class="column">
+          <div class="card">
+            <img src="" alt="Abhi" style="width:100%">
+            <div class="container">
+              <h2>Abhi Chandra</h2>
+              <p class="title">CEO & Founder</p>
+              <p>He has an experience on 5 years in tourism industry.Best tourist guide award 2021.</p>
+              <p>abhi@example.com</p>
+              <p><button class="button">Contact</button></p>
+            </div>
+          </div>
+        </div>
+      
+        <div class="column">
+          <div class="card">
+            <img src="" alt="Rohit" style="width:100%">
+            <div class="container">
+              <h2>Rohit</h2>
+              <p class="title">Art Director</p>
+              <p>He has an experienceof 10 years as art Director. he is one of the key member to our company, one of a founder.</p>
+              <p>rohit@example.com</p>
+              <p><button class="button">Contact</button></p>
+            </div>
+          </div>
+        </div>
+      
+        <div class="column">
+          <div class="card">
+            <img src="" alt="Revanth" style="width:100%">
+            <div class="container">
+              <h2>Revanth</h2>
+              <p class="title">Designer</p>
+              <p> He coordinates clients and others.</p>
+              <p>revanth@example.com</p>
+              <p><button class="button">Contact</button></p>
+            </div>
+          </div>
+        </div>
+      </div>
+</body>
+</html
+
+
+// contact.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us </title>
+</head>
+<body>
+
+
+       
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+              <p>Any Emergency, Please fill this form and the problem in subject our team will reachout to you in less than 10 minutes </p>
+              <center>
+              
+              <form name="sentMessage" id="contactForm" action = "/contact" method="post" novalidate>
+                <div class="control-group">
+                  <div class="form-group floating-label-form-group controls">
+                    <label>name</label>
+                    <input type="text" class="form-control" placeholder="Name" id="name" name='name' required data-validation-required-message="Please enter your name.">
+                    <p class="help-block text-danger"></p>
+                  </div>
+                </div>
+                <div class="control-group">
+                  <div class="form-group floating-label-form-group controls">
+                    <label>email</label>
+                    <input type="email" class="form-control" placeholder="Email Address" id="email" name="email" required data-validation-required-message="Please enter your email address.">
+                    <p class="help-block text-danger"></p>
+                  </div>
+                </div>
+                <div class="control-group">
+                  <div class="form-group col-xs-12 floating-label-form-group controls">
+                    <label>phone</label>
+                    <input type="tel" class="form-control" placeholder="Phone Number" name="phone" id="phone" required data-validation-required-message="Please enter your phone number.">
+                    <p class="help-block text-danger"></p>
+                  </div>
+                </div>
+                <div class="control-group">
+                  <div class="form-group floating-label-form-group controls">
+                    <label>Subject</label>
+                    <textarea rows="5" class="form-control" placeholder="Subject" name = "Subject" id="Subject" required data-validation-required-message="Please enter a message."></textarea>
+                    <p class="help-block text-danger"></p>
+                  </div>
+                </div>
+                <br>
+                <div id="success"></div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary" id="sendMessageButton">Send</button>
+                </center>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+    
+
+    
+    
+    
+</body>
+</html>
+
+// sign up
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body{
+   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+* {box-sizing: border-box}
+input[type=text], input[type=password] {
+   width: 100%;
+   font-size: 28px;
+   padding: 15px;
+   margin: 5px 0 22px 0;
+   display: inline-block;
+   border: none;
+   background: #f1f1f1;
+}
+label{
+   font-size: 15px;
+}
+input[type=text]:focus, input[type=password]:focus {
+   background-color: #ddd;
+   outline: none;
+}
+hr {
+   border: 1px solid #f1f1f1;
+   margin-bottom: 25px;
+}
+button {
+   font-size: 18px;
+   font-weight: bold;
+   background-color: rgb(145, 245, 148);
+   color: white;
+   padding: 14px 20px;
+   margin: 8px 0;
+   border: none;
+   cursor: pointer;
+   width: 100%;
+   opacity: 0.9;
+}
+button:hover {
+   opacity:1;
+}
+.cancel {
+   padding: 14px 10px;
+   background-color: #fa8279;
+}
+.formContainer {
+   padding: 16px;
+}
+.formContainer p{
+   font-size: 28px;
+}
+</style>
+<body>
+<form>
+   
+<div class="formContainer">
+<h1>Sign Up Form</h1>
+<hr>
+<label for="email"><b>Email</b></label>
+<input type="text" placeholder="Enter Email" name="email" required>
+<label for="password"><b>Password</b></label>
+<input type="password" placeholder="Enter Password" name="password" required>
+<label for="repeatPassword"><b>Repeat Password</b></label>
+<input type="password" placeholder="Repeat Password" name="repeatPassword"
+required>
+<label>
+<input type="checkbox" checked="checked" name="remember" style="margin: 15px" Remember me
+</label>
+<p>By creating an account you agree to our <a href="#"
+style="color:dodgerblue">Terms & Privacy</a><p>
+<div>
+<button type="button" class="cancel">Cancel</button>
+<button type="submit" class="signup">Sign Up</button>
+</div>
+</div>
+</form>
+</body>
+</html>
+
+//login.html
+<!DOCTYPE html>   
+<html>   
+<head>  
+<meta name="viewport" content="width=device-width, initial-scale=1">  
+<title> Login Page </title>  
+<style>   
+Body {  
+  font-family: Calibri, Helvetica, sans-serif;  
+  background-color: pink;  
+}  
+button {   
+       background-color: #4CAF50;   
+       width: 100%;  
+        color: orange;   
+        padding: 15px;   
+        margin: 10px 0px;   
+        border: none;   
+        cursor: pointer;   
+         }   
+ form {   
+        border: 3px solid #f1f1f1;   
+    }   
+ input[type=text], input[type=password] {   
+        width: 100%;   
+        margin: 8px 0;  
+        padding: 12px 20px;   
+        display: inline-block;   
+        border: 2px solid green;   
+        box-sizing: border-box;   
+    }  
+ button:hover {   
+        opacity: 0.7;   
+    }   
+  .cancelbtn {   
+        width: auto;   
+        padding: 10px 18px;  
+        margin: 10px 5px;  
+    }   
+        
+     
+ .container {   
+        padding: 25px;   
+        background-color: lightblue;  
+    }   
+</style>   
+</head>    
+<body>    
+    <center> <h1> Student Login Form </h1> </center>   
+    <form>  
+        <div class="container">   
+            <label>Username : </label>   
+            <input type="text" placeholder="Enter Username" name="username" required>  
+            <label>Password : </label>   
+            <input type="password" placeholder="Enter Password" name="password" required>  
+            <button type="submit">Login</button>   
+            <input type="checkbox" checked="checked"> Remember me   
+            <button type="button" class="cancelbtn"> Cancel</button>   
+            Forgot <a href="#"> password? </a>   
+        </div>   
+    </form>     
+</body>     
+</html>  
+
+// book.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Place</title>
+    <style>
+    
+        #container{
+            width: 200px;
+  height: 300px;
+  border: 1px solid #c3c3c3;
+  padding:10%;
+font-size: 20px;
+        }
+        
+    </style>
+</head>
+<body>
+   <p><h2>Your process is almost done please fill the form</h2></p>
+   <div id=container>
+     <center>
+       
+    <label for="name"><b>name</b></label>
+    <input type="name" placeholder="Enter Name" name="name" required>
+    <label for="email"><b>Email</b></label>
+    <input type="text" placeholder="Enter Email" name="email" required>
+    <label for="phone"><b>phone</b></label>
+    <input type="phone" placeholder="Enter phone nbr" name="phone" required>
+    
+    <label for=" date and time"><b>date and time</b></label>
+    <input type="datetime-local" />
+    <input type="submit">
+    </div>
+    </center>
+</body>
+</html>
+
+
+
+
