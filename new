@@ -1,0 +1,129 @@
+from flask import Flask,render_template,request
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:1234@localhost:5432/northwind' 
+# app.config['SQLALCHEMY_DATABASE_URL'] = 'postgres://username:password@localhost:5432/dbname'
+db = SQLAlchemy(app)
+
+
+class Contacts(db.Model):
+    '''
+    sno, name phone_num, Subject, date, email
+    ''' 
+    sno = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    phone_num = db.Column(db.String(12), nullable=False)
+    Subject = db.Column(db.String(120), nullable=False)
+    date = db.Column(db.String(2000), nullable=True)
+    email = db.Column(db.String(20), nullable=False)
+
+from flask import Flask, render_template, request
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:1234@localhost:5432/northwind'
+db = SQLAlchemy(app)
+
+
+class Contact(db.Model):
+    sno = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    phone_num = db.Column(db.String(12), nullable=False)
+    subject = db.Column(db.String(120), nullable=False)
+    date = db.Column(db.String(2000), nullable=True)
+    email = db.Column(db.String(20), nullable=False)
+
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), nullable=False)
+    password = db.Column(db.String(200), nullable=False)
+
+
+class SignUp(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(80), nullable=False)
+    password = db.Column(db.String(200), nullable=False)
+
+
+class Booking(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    email = db.Column(db.String(80), nullable=False)
+    phone = db.Column(db.String(12), nullable=False)
+
+
+
+@app.route("/")  
+def home():
+    return render_template("index.html")
+
+ 
+@app.route("/about")
+def about():
+    return render_template("about.html")  
+
+
+@app.route("/contact", methods = ['GET', 'POST'])
+def contact():
+    if(request.method=='POST'):
+        '''Add entry to the database'''
+        name = request.form.get('name')
+        email = request.form.get('email')
+        phone = request.form.get('phone')
+        Subject = request.form.get('Subject')
+        entry = Contacts(name=name, phone_num = phone, Subject = Subject, email = email )
+        db.session.add(entry)
+        db.session.commit()
+    return render_template("contact.html")
+    
+@app.route("/login_form", methods = ['GET', 'POST'])
+def logging():
+    if(request.method=='POST'):
+        '''Add entry to the database'''
+        username = request.form.get('username')
+        Password =request.form.get('Password')
+        entry = logging (username=username, Password=Password)
+        db.session.add(entry)
+        db.session.commit()
+    return render_template("login_form.html")    
+
+
+@app.route("/sign_up", methods = ['GET', 'POST'])
+def signingup():
+    if(request.method=='POST'):
+        '''Add entry to the database'''
+        email = request.form.get('email')
+        password = request.form.get('password')
+        repeatPassword = request.form.get('repeatpassword')
+        entry = signingup(email=email , password=password, repeatPassword=repeatPassword)
+        db.session.add(entry)
+        db.session.commit()
+    return render_template("sign_up.html")
+
+@app.route("/book", methods = ['GET','POST'])
+def book():
+    if(request.method=='POST'):
+        '''Add entry to the database'''
+        name = request.form.get('name')
+        Email =request.form.get('Email')
+        phone= request.form.get('phone')
+        date_and_time= request.form.get('date and time')
+        entry = Contacts(name=name,Email=Email, phone= phone,date_and_time= date_and_time)
+        db.session.add(entry)
+        db.session.commit()
+    return render_template("book.html")
+        
+
+
+
+    
+if __name__ == '__main__':
+    with app.app_context():
+
+        db.create_all()
+        app.run(debug = True,port=8080)
