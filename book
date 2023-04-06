@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Place</title>
+    <style>
+        #container {
+            width: 200px;
+            height: 300px;
+            border: 1px solid #c3c3c3;
+            padding: 10%;
+            font-size: 25px;
+        }
+
+        body {
+            background-image: url("static/bk.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        #success-msg {
+            display: none;
+            color: green;
+            font-size: 20px;
+        }
+
+        .form-label {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .form-input {
+            margin-top: 5px;
+        }
+
+        .form-input input {
+            width: 100%;
+            padding: 5px;
+        }
+
+        .form-submit {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .form-submit input {
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <p>
+        <h2>Your process is almost done please fill the form</h2>
+    </p>
+    <div id="container">
+        <center>
+
+            <form onsubmit="showSuccessMsg()">
+                <div class="form-label">
+                    <label for="name"><b>name</b></label>
+                </div>
+                <div class="form-input">
+                    <input type="text" placeholder="Enter Name" name="name" required>
+                </div>
+                <div class="form-label">
+                    <label for="email"><b>Email</b></label>
+                </div>
+                <div class="form-input">
+                    <input type="email" placeholder="Enter Email" name="email" required>
+                </div>
+                <div class="form-label">
+                    <label for="phone"><b>phone</b></label>
+                </div>
+                <div class="form-input">
+                    <input type="tel" placeholder="Enter phone nbr" name="phone" required>
+                </div>
+                <div class="form-label">
+                    <label for="date and time"><b>date and time</b></label>
+                </div>
+                <div class="form-input">
+                    <input type="datetime-local" />
+                </div>
+                <div class="form-submit">
+                    <input type="submit" value="Submit">
+                </div>
+            </form>
+            <!-- <p id="success-msg">Form submitted successfully!</p> -->
+
+        </center>
+    </div>
+</body>
+</html>  
